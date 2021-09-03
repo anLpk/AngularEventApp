@@ -1,10 +1,19 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { ISession } from "../shared";
+import { Router } from "@angular/router";
 
 @Component({
-    templateUrl: './create-session.component.html'
+  selector: 'create-session',
+  templateUrl: './create-session.component.html'
 })
 export class CreateSessionComponent implements OnInit {
+
+  constructor(private router: Router) {}
+
+  @Output() saveNewSession = new EventEmitter()
+  @Output() cancelAddSession = new EventEmitter()
+
   newSessionForm?: FormGroup
   name?: FormControl
   presenter?: FormControl
@@ -26,5 +35,22 @@ export class CreateSessionComponent implements OnInit {
       level: this.level,
       abstract: this.abstract
     })
+  }
+
+  saveSession(formValues: any) {
+    let session:ISession = {
+      id: undefined,
+      name: formValues.name,
+      duration: +formValues.duration,
+      level: formValues.level,
+      presenter: formValues.level,
+      abstract: formValues.abstract,
+      voters: []
+    }
+    this.saveNewSession.emit(session)
+  }
+
+  cancel() {
+    this.cancelAddSession.emit()
   }
 }
