@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, Inject } from '@angular/core'
 import { FormControl, FormGroup } from '@angular/forms'
 import { AuthService } from './auth.service'
-
+import { TOASTR_TOKEN, Toastr } from '../common/toastr.service'
 
 @Component({
   templateUrl: './profile.component.html',
@@ -12,11 +12,14 @@ import { AuthService } from './auth.service'
 export class ProfileComponent implements OnInit {
   profileForm?:FormGroup
 
-  constructor(private authService:AuthService) {}
-  
+  constructor(private authService:AuthService, 
+    @Inject(TOASTR_TOKEN) private toastr: Toastr) {
+      console.log(this.toastr.success('hey'))
+  }
+
   ngOnInit() {
-    let firstName = new FormControl(this.authService.currentUser?.firstName)
-    let lastName = new FormControl(this.authService.currentUser?.lastName)
+    const firstName = new FormControl(this.authService.currentUser?.firstName)
+    const lastName = new FormControl(this.authService.currentUser?.lastName)
     this.profileForm = new FormGroup({
       firstName: firstName,
       lastName: lastName

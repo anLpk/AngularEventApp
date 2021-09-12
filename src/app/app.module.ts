@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { ToastrService } from './common/toastr.service';
+import { TOASTR_TOKEN, Toastr } from './common/toastr.service';
 import { CollapsibleWellComponent } from './common/collapsible-well.component';
 import { Error404Component } from './errors/404.component';
 import { EventsAppComponent } from './events-app.component';
 import { NavBarComponent } from './nav/navbar.component';
 import { appRoutes } from './routes';
+import { HttpClientModule } from '@angular/common/http';
 
 import {
   EventsListComponent,
@@ -14,14 +15,18 @@ import {
   EventService,
   EventDetailsComponent,
   CreateEventComponent,
-  EventRouteActivator,
+
   EventListResolver,
   CreateSessionComponent,
+  UpvoteComponent,
   DurationPipe,
   SessionListComponent,
+  EventResolver,
 } from './events/index'
 import { AuthService } from './user/auth.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+declare let toastr:Toastr;
 
 @NgModule({
   declarations: [
@@ -35,18 +40,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CreateSessionComponent,
     SessionListComponent,
     CollapsibleWellComponent,
+    UpvoteComponent,
     DurationPipe
   ],
   imports: [
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    HttpClientModule
   ],
   providers: [
     EventService, 
-    ToastrService, 
-    EventRouteActivator,
+    { provide: TOASTR_TOKEN, useValue: toastr },
+    EventResolver,
     EventListResolver,
     AuthService,
     {
